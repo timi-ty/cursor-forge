@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "description": "Machine-readable catalog of portable Cursor agent skills. AI agents: parse this file to find a skill matching a user's task, then follow the installation instructions in README.md.",
+  "skills": [
+    {
+      "name": "code-review",
+      "path": "skills/code-review",
+      "description": "Perform a senior-engineer code review of a pull request. Checks that new code conforms to existing codebase patterns, introduces no bugs, is maximally efficient, and contains no dead or unused code.",
+      "triggers": [
+        "review a PR",
+        "code review",
+        "review pull request",
+        "review this PR",
+        "check this pull request",
+        "user attaches a PR link or URL"
+      ],
+      "files": ["SKILL.md", "checklist.md"],
+      "dependencies": ["gh CLI (GitHub CLI)"],
+      "notes": "8-phase workflow: gather PR context, understand codebase patterns, file-by-file diff review, cross-cutting analysis, deliver report, verdict, confirm with user, apply verdict (approve/merge or request changes). Outputs a pr-{number}-review.md file."
+    },
+    {
+      "name": "commit-agent-changes",
+      "path": "skills/commit-agent-changes",
+      "description": "Identify the current agent's code changes, create a branch, group changes into logical commits, and open a PR. Use when the user says 'commit my changes', 'commit agent changes', 'create a PR from this session', 'push what you changed', or wants to turn the current agent's work into a pull request.",
+      "triggers": [
+        "commit my changes",
+        "commit agent changes",
+        "create a PR from this session",
+        "push what you changed",
+        "turn agent work into a pull request",
+        "commit what you did",
+        "push your changes"
+      ],
+      "files": ["SKILL.md"],
+      "dependencies": ["gh CLI (GitHub CLI)", "git"],
+      "notes": "5-phase workflow: identify agent changes (introspect context + parse transcript + cross-reference git), detect branch state, branch out, group and commit with conventional commit messages, push and create PR. Handles multi-repo workspaces."
+    },
+    {
+      "name": "redeploy-frontend",
+      "path": "skills/redeploy-frontend",
+      "description": "Trigger a Vercel redeploy of the frontend by pushing a harmless comment change to dev. Use when the user says 'redeploy', 'redeploy frontend', 'trigger vercel deploy', or 'trigger redeploy'.",
+      "triggers": [
+        "redeploy",
+        "redeploy frontend",
+        "trigger vercel deploy",
+        "trigger redeploy"
+      ],
+      "files": ["SKILL.md"],
+      "dependencies": ["git", "pnpm", "Vercel (connected to the repo)"],
+      "notes": "Project-specific to a Next.js frontend deployed on Vercel. Updates a '// redeploy: <timestamp>' comment in src/app/layout.tsx and pushes to the dev branch. Auto-fixes prettier formatting issues before pushing. You will likely need to adapt the file paths, branch name, and package manager to your project."
+    }
+  ]
+}
