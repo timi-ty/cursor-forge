@@ -148,7 +148,7 @@ Act on the result:
 - **Ahead only** (behind = 0, ahead > 0): this is expected if there are already commits on the branch. Inform the user: "You have {N} existing commit(s) on `{branch}` not yet pushed. New commits will be added on top." Continue.
 - **Diverged** (both > 0): **abort** and tell the user: "Local `{branch}` has diverged from `origin/{branch}` ({N} ahead, {M} behind). Resolve the divergence manually before proceeding."
 
-If changes span multiple repositories, confirm each repo separately. Each repo gets its own branch and PR.
+**Note (applies to all of Phase 2):** If changes span multiple repositories, confirm each repo separately. Each repo gets its own branch and PR.
 
 ---
 

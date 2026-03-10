@@ -7,10 +7,6 @@ description: Sync locally installed Cursor agent skills to match a branch of the
 
 Sync locally installed Cursor agent skills with a branch of the `cursor-skills` GitHub repo. Works for first-time installs (everything is new) and subsequent updates (adds new skills, updates changed ones, removes deleted ones). Always asks for confirmation before making changes.
 
-## Dependencies
-
-- `gh` CLI (GitHub CLI), authenticated
-
 ## Workflow
 
 ### Step 0: Parse the URL
@@ -68,6 +64,8 @@ gh api "repos/$OWNER/$REPO/contents/{skill-path}/{file}?ref=$BRANCH" \
 ```
 
 If any file differs (or does not exist locally), classify the skill as UPDATED.
+
+> **Note:** On Windows, local files may use CRLF line endings while the decoded remote content uses LF. Normalize line endings (strip `\r`) from both sides before comparing to avoid false-positive UPDATED classifications.
 
 **REMOVED** — skill folder exists locally in this scope but is NOT present in the remote catalog.
 
@@ -132,6 +130,8 @@ cp -r <tmp-dir>/{skill-path} <scope-path>/{skill-name}
 ```
 
 Clean up the temp directory after all changes are applied.
+
+If any copy operation fails, clean up the temp directory immediately and abort with a message listing which changes were applied before the failure and which were not.
 
 ---
 

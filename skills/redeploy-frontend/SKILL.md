@@ -100,7 +100,7 @@ $PKG_MANAGER run build
 
 ### Step 4: Update the redeploy timestamp
 
-Open `$TIMESTAMP_FILE`. Look for an existing line matching the pattern `// redeploy: `.
+Open `$TIMESTAMP_FILE`. Look for an existing line matching the pattern `// redeploy:`.
 
 - If the line exists, **replace** it with a new UTC timestamp: `// redeploy: <timestamp>`
 - If no such line exists, **insert** `// redeploy: <timestamp>` as the very first line of the file.
@@ -114,7 +114,7 @@ date -u +%Y-%m-%dT%H:%M:%SZ                                    # macOS/Linux/Git
 Example result:
 ```typescript
 // redeploy: 2026-03-05T14:23:00Z
-import type { Metadata } from "next";
+// ... rest of file
 ```
 
 ### Step 5: Commit and push
