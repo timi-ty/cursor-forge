@@ -86,7 +86,7 @@ $PKG_MANAGER run build
 
 **If the build fails**, inspect the output:
 
-- **Prettier-only failure** -- the output contains `[warn]` lines listing files and ends with `Code style issues found`. The `next build` phase never ran. Auto-fix:
+- **Prettier-only failure** -- the output contains `[warn]` lines listing files and ends with `Code style issues found`. The build phase never ran. Auto-fix:
 
   ```bash
   $PKG_MANAGER run format

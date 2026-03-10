@@ -97,7 +97,7 @@ Ask once: "Apply these changes?" before proceeding with any adds or updates.
 Ask separately for each skill to be removed: "Remove `{skill-name}` from {scope}? It is no longer in the remote catalog." Only remove if the user confirms.
 
 **Scope for new skills:**
-If a new skill is detected and the workspace scope (`.cursor/skills/`) is not present in the current directory, default to global. If it exists, ask the user: "Install `{skill-name}` globally or workspace-only?"
+If the workspace scope (`.cursor/skills/`) is not present in the current directory, default all new skills to global. If it exists, ask once: "Where should I install these new skills? [list all new skill names] — globally, workspace-only, or mixed? (If mixed, specify per skill.)"
 
 ---
 
@@ -106,7 +106,7 @@ If a new skill is detected and the workspace scope (`.cursor/skills/`) is not pr
 Clone the remote branch to a temporary directory to get all skill files (not just `SKILL.md`):
 
 ```bash
-# Use gh to clone only the skills folder at the target branch
+# Clone the full repo (shallow) to access all skill files
 git clone --depth 1 --branch $BRANCH https://github.com/$OWNER/$REPO.git <tmp-dir>
 ```
 

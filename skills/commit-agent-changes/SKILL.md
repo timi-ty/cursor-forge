@@ -126,6 +126,8 @@ If the user excludes files, remove them from the list before continuing.
 
 #### Step 3: Verify remote branch state
 
+Set `$BRANCH` to the current branch name (result of `git rev-parse --abbrev-ref HEAD` from Step 1).
+
 For each repository, fetch the latest remote state (without merging):
 
 ```bash
