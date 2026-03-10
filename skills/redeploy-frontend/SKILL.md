@@ -33,11 +33,8 @@ git branch --show-current
 ```
 The user is responsible for being on the correct deploy branch before invoking this skill.
 
-**Timestamp file** — find the file to inject the redeploy comment into, in priority order:
-1. Search the repo for an existing `// redeploy:` line — a prior deployment already designated this file:
-   ```bash
-   grep -rl "// redeploy:" src/ app/ --include="*.ts" --include="*.tsx" 2>/dev/null | head -1
-   ```
+**Timestamp file** -- find the file to inject the redeploy comment into, in priority order:
+1. Use your file-search tools (Grep) to find any `.ts` or `.tsx` file under `src/` or `app/` that contains the line `// redeploy:`. If found, that file is `$TIMESTAMP_FILE`.
 2. Try common entry points in order: `src/app/layout.tsx`, `app/layout.tsx`, `src/main.tsx`, `src/App.tsx`, `src/index.ts`, `src/index.tsx`
 3. If none of the above exist, ask the user: "Which file should I use to inject the redeploy timestamp comment?"
 
@@ -55,11 +52,27 @@ If there is any output, **abort** and tell the user:
 
 > "There are uncommitted changes in this repo. Stash or commit them before redeploying."
 
-### Step 2: Pull latest
+### Step 2: Verify remote branch state
+
+Fetch the latest remote state (without merging):
 
 ```bash
-git pull origin $BRANCH
+git fetch origin
 ```
+
+Compute the ahead/behind relationship:
+
+```bash
+git rev-list --count HEAD..origin/$BRANCH   # commits behind
+git rev-list --count origin/$BRANCH..HEAD   # commits ahead
+```
+
+Act on the result:
+
+- **Up to date** (both = 0): continue.
+- **Behind only** (behind > 0, ahead = 0): ask the user: "Your branch is {N} commit(s) behind `origin/{branch}`. Fast-forward before proceeding?" If yes, run `git pull --ff-only origin $BRANCH` and continue. If no, abort.
+- **Ahead only** (behind = 0, ahead > 0): warn the user: "You have {N} unpushed commit(s) on `{branch}`. Proceed anyway?" If yes, continue. If no, abort.
+- **Diverged** (both > 0): **abort** and tell the user: "Local `{branch}` has diverged from `origin/{branch}` ({N} ahead, {M} behind). Resolve the divergence manually before proceeding."
 
 ### Step 3: Local pre-build check and auto-fix
 
@@ -73,7 +86,7 @@ $PKG_MANAGER run build
 
 **If the build fails**, inspect the output:
 
-- **Prettier-only failure** — the output contains `[warn]` lines listing files and ends with `Code style issues found`. The `next build` phase never ran. Auto-fix:
+- **Prettier-only failure** -- the output contains `[warn]` lines listing files and ends with `Code style issues found`. The `next build` phase never ran. Auto-fix:
 
   ```bash
   $PKG_MANAGER run format
@@ -83,7 +96,7 @@ $PKG_MANAGER run build
   - If the re-run **passes**, continue to Step 4. The formatted files will be staged alongside the timestamp change in Step 5.
   - If the re-run **fails** with a different error, treat as non-trivial (see below).
 
-- **Non-trivial failure** (ESLint errors, TypeScript type errors, build errors) — **abort** and report the full build output to the user. Ask follow-up questions about how to resolve before pushing.
+- **Non-trivial failure** (ESLint errors, TypeScript type errors, build errors) -- **abort** and report the full build output to the user. Ask follow-up questions about how to resolve before pushing.
 
 ### Step 4: Update the redeploy timestamp
 
