@@ -54,6 +54,7 @@
       "path": "skills/sync-skills",
       "description": "Sync locally installed Cursor agent skills to match a branch of the cursor-skills repo. Handles first-time installs and subsequent updates in one flow. Use when the user pastes a github.com/timi-ty/cursor-skills URL, or says 'install skills', 'update skills', 'sync skills', or 'install cursor skills'.",
       "triggers": [
+        "user pastes a github.com/timi-ty/cursor-skills URL",
         "install skills",
         "update skills",
         "sync skills",
