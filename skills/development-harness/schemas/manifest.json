@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0",
+  "skill_version": "1.0",
+  "entries": [
+    {
+      "path": "AGENTS.md",
+      "ownership": "harness-owned",
+      "type": "guidance",
+      "removable": true,
+      "note": "Created only if none existed; if pre-existing, ownership is managed-block instead"
+    },
+    {
+      "path": ".harness/",
+      "ownership": "harness-owned",
+      "type": "directory",
+      "removable": true
+    },
+    {
+      "path": ".harness/ARCHITECTURE.md",
+      "ownership": "harness-owned",
+      "type": "reference",
+      "removable": true
+    },
+    {
+      "path": ".harness/config.json",
+      "ownership": "harness-owned",
+      "type": "config",
+      "removable": true
+    },
+    {
+      "path": ".harness/manifest.json",
+      "ownership": "harness-owned",
+      "type": "manifest",
+      "removable": true
+    },
+    {
+      "path": ".harness/state.json",
+      "ownership": "harness-owned",
+      "type": "state",
+      "removable": true
+    },
+    {
+      "path": ".harness/phase-graph.json",
+      "ownership": "harness-owned",
+      "type": "phase-graph",
+      "removable": true
+    },
+    {
+      "path": ".harness/checkpoint.md",
+      "ownership": "harness-owned",
+      "type": "checkpoint",
+      "removable": true
+    },
+    {
+      "path": ".harness/pr-review-checklist.md",
+      "ownership": "harness-owned",
+      "type": "reference",
+      "removable": true
+    },
+    {
+      "path": ".harness/scripts/",
+      "ownership": "harness-owned",
+      "type": "directory",
+      "removable": true
+    },
+    {
+      "path": ".harness/plans/",
+      "ownership": "harness-owned",
+      "type": "directory",
+      "removable": true
+    },
+    {
+      "path": ".harness/issues/",
+      "ownership": "harness-owned",
+      "type": "directory",
+      "removable": true
+    },
+    {
+      "path": "PHASES/",
+      "ownership": "harness-owned",
+      "type": "directory",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/create-development-harness.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/invoke-development-harness.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/update-development-harness.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/harness-state.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/sync-development-harness.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/clear-development-harness.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/commands/inject-harness-issues.md",
+      "ownership": "harness-owned",
+      "type": "command",
+      "removable": true
+    },
+    {
+      "path": ".cursor/hooks.json",
+      "ownership": "harness-owned",
+      "type": "hook-config",
+      "removable": true
+    },
+    {
+      "path": ".cursor/hooks/continue-loop.py",
+      "ownership": "harness-owned",
+      "type": "hook-script",
+      "removable": true
+    },
+    {
+      "path": ".cursor/rules/harness-core.mdc",
+      "ownership": "harness-owned",
+      "type": "rule",
+      "removable": true
+    },
+    {
+      "path": ".cursor/rules/harness-validation.mdc",
+      "ownership": "harness-owned",
+      "type": "rule",
+      "removable": true
+    },
+    {
+      "path": ".cursor/rules/harness-git.mdc",
+      "ownership": "harness-owned",
+      "type": "rule",
+      "removable": true
+    },
+    {
+      "path": ".cursor/rules/harness-deployment.mdc",
+      "ownership": "harness-owned",
+      "type": "rule",
+      "removable": true
+    },
+    {
+      "path": ".cursor/rules/harness-testing.mdc",
+      "ownership": "harness-owned",
+      "type": "rule",
+      "removable": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "ownership": "product-owned",
+      "type": "ci-cd",
+      "removable": false,
+      "note": "Scaffolded by harness during create, now product-owned"
+    },
+    {
+      "path": "tests/e2e/",
+      "ownership": "product-owned",
+      "type": "directory",
+      "removable": false,
+      "note": "Scaffolded by harness during create, now product-owned"
+    }
+  ]
+}

@@ -1,16 +1,30 @@
-# cursor-skills
+# cursor-forge
 
-Portable collection of [Cursor](https://cursor.com) agent skills. Clone this repo to install battle-tested skills on any machine -- globally or per-workspace.
+Portable collection of [Cursor](https://cursor.com) agent skills and a development harness for AI-native engineering. Clone this repo to install battle-tested skills on any machine -- globally or per-workspace.
 
 ## Skill Catalog
 
 | Skill | Description | Triggers | Dependencies |
 |-------|-------------|----------|--------------|
+| **[development-harness](skills/development-harness/)** | Project-local control plane that compiles ROADMAP.md into phased, validator-backed autonomous execution. 7 commands: create, invoke, update, state, sync, clear, inject-issues. | `create development harness`, `invoke harness`, `continue from harness`, `update harness`, `harness state`, `sync harness`, `clear harness`, `inject issues` | `git`, `python3` |
 | **[code-review](skills/code-review/)** | Senior-engineer PR code review. Checks conformance, correctness, efficiency, and dead code across an 8-phase workflow. | `review a PR`, `code review`, `review pull request`, attach a PR URL | `gh` CLI |
 | **[commit-agent-changes](skills/commit-agent-changes/)** | Turn the current agent session's changes into a branch with logically grouped commits and a PR. | `commit my changes`, `commit agent changes`, `create a PR from this session`, `push what you changed` | `gh` CLI, `git` |
 | **[issue-resolution-report](skills/issue-resolution-report/)** | Write and post a technically sound issue resolution report as a GitHub issue comment and/or PR description after fixing a bug. | `write a resolution report`, `document what was fixed`, `update a PR body with findings`, `post a resolution comment` | `gh` CLI |
 | **[redeploy-frontend](skills/redeploy-frontend/)** | Trigger a Vercel redeploy by pushing a timestamp comment. Auto-detects package manager, branch, and target file. Auto-fixes prettier issues. | `redeploy`, `redeploy frontend`, `trigger vercel deploy` | `git`, Vercel |
-| **[sync-skills](skills/sync-skills/)** | Sync locally installed skills to match a branch of this repo. Handles first-time installs and updates in one flow. | paste a `github.com/timi-ty/cursor-skills` URL, `install skills`, `update skills`, `sync skills` | `gh` CLI, `git` |
+| **[sync-skills](skills/sync-skills/)** | Sync locally installed skills to match a branch of this repo. Handles first-time installs and updates in one flow. | paste a `github.com/timi-ty/cursor-forge` URL, `install skills`, `update skills`, `sync skills` | `gh` CLI, `git` |
+
+## Development Harness
+
+The development harness is a project-local control plane that turns a ROADMAP.md into a sequence of validated, self-executing tasks.
+
+**Workflow:**
+1. Install the skill globally: `./install.sh development-harness --global`
+2. In any project, say "create development harness" -- the agent asks questions, reads your ROADMAP.md, and generates the full harness
+3. After creation, 7 slash commands are available in your workspace (`/invoke-development-harness`, `/harness-state`, etc.)
+4. Run `/invoke-development-harness` to execute work -- a stop hook keeps the agent iterating until a goal is verified or ambiguity is hit
+5. Use `/inject-harness-issues` to report problems, `/sync-development-harness` to reconcile state, `/harness-state` for reports
+
+**Architecture:** One globally-installed skill bootstraps workspace-local commands, hooks, rules, and deterministic Python helpers. All scripts use stdlib only -- no pip dependencies. See [skills/development-harness/references/architecture.md](skills/development-harness/references/architecture.md) for full details.
 
 ## Installation
 
@@ -24,13 +38,13 @@ For the **first-time bootstrap** (before `sync-skills` is available), use one of
 
 ```bash
 # Clone the repo
-git clone https://github.com/timi-ty/cursor-skills.git
-cd cursor-skills
+git clone https://github.com/timi-ty/cursor-forge.git
+cd cursor-forge
 
 # Install a skill globally (available in all projects)
 ./install.sh sync-skills --global
 
-# Then paste https://github.com/timi-ty/cursor-skills into Cursor agent chat
+# Then paste https://github.com/timi-ty/cursor-forge into Cursor agent chat
 # to install the rest of the skills via the sync-skills skill
 ```
 
