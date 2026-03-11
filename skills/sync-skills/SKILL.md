@@ -1,11 +1,11 @@
 ---
 name: sync-skills
-description: Sync locally installed Cursor agent skills to match a branch of the cursor-skills repo. Handles first-time installs and subsequent updates in one flow. Use when the user pastes a github.com/timi-ty/cursor-skills URL, or says "install skills", "update skills", "sync skills", or "install cursor skills".
+description: Sync locally installed Cursor agent skills to match a branch of the cursor-forge repo. Handles first-time installs and subsequent updates in one flow. Use when the user pastes a github.com/timi-ty/cursor-forge URL, or says "install skills", "update skills", "sync skills", or "install cursor skills".
 ---
 
 # Sync Skills
 
-Sync locally installed Cursor agent skills with a branch of the `cursor-skills` GitHub repo. Works for first-time installs (everything is new) and subsequent updates (adds new skills, updates changed ones, removes deleted ones). Always asks for confirmation before making changes.
+Sync locally installed Cursor agent skills with a branch of the `cursor-forge` GitHub repo. Works for first-time installs (everything is new) and subsequent updates (adds new skills, updates changed ones, removes deleted ones). Always asks for confirmation before making changes.
 
 ## Workflow
 
