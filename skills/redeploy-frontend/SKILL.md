@@ -69,11 +69,16 @@ Check if the user has local commits on `$BRANCH` that are not yet on the remote:
 git rev-list --count origin/$BRANCH..HEAD
 ```
 
-If ahead > 0 and the user is on `$BRANCH`, ask: "You have {N} unpushed commit(s) on `{branch}` not yet on the remote. Include them in the redeploy?" If yes, update the worktree to match the local branch tip:
+If ahead > 0 and the user is on `$BRANCH`, ask: "You have {N} unpushed commit(s) on `{branch}` not yet on the remote. Include them in the redeploy?"
+
+If yes, capture the local tip and merge it into the worktree's detached HEAD:
 
 ```bash
-git -C $DEPLOY_DIR checkout $BRANCH
+LOCAL_TIP=$(git rev-parse $BRANCH)
+git -C $DEPLOY_DIR merge $LOCAL_TIP --no-edit
 ```
+
+Do NOT use `git -C $DEPLOY_DIR checkout $BRANCH` -- git forbids the same branch in two worktrees simultaneously, and the user's main worktree already has `$BRANCH` checked out. The worktree is on a detached HEAD (from `origin/$BRANCH`), so a merge incorporates the local commits without violating the one-branch-per-tree rule.
 
 If no, continue with the worktree at `origin/$BRANCH`.
 
@@ -85,6 +90,8 @@ Install dependencies in the worktree so the build step works:
 cd $DEPLOY_DIR
 $PKG_MANAGER install
 ```
+
+**Optimization:** For large projects where `install` is slow, you may symlink `node_modules` from the main worktree instead: `ln -s $REPO_ROOT/node_modules $DEPLOY_DIR/node_modules` (Unix) or `mklink /J $DEPLOY_DIR\node_modules $REPO_ROOT\node_modules` (Windows). This avoids a full install. Only do this if both worktrees are on the same branch and dependency versions match.
 
 ### Step 3: Local pre-build check and auto-fix
 

@@ -75,6 +75,10 @@ git diff --name-only --cached
 
 Build the final change list: a file is included ONLY if it appears in BOTH the agent's list (Steps 1+2) AND git reports it as changed/untracked/deleted. This filters out pre-existing dirty state that the agent did not cause.
 
+#### Step 4: Check for other uncommitted changes
+
+Compare the agent's final file list against all dirty files reported by git. Any dirty file NOT in the agent's list belongs to another agent or pre-existing state. If such files exist, record them separately -- they will NOT be committed, but the user should be made aware of them in Phase 2 so they know other work is in progress.
+
 Organize the final list by repository:
 
 ```
@@ -82,6 +86,9 @@ repo: <repo-name> (<repo-path>)
   modified: path/relative/to/repo
   new:      path/relative/to/repo
   deleted:  path/relative/to/repo
+  (other uncommitted files not owned by this agent:)
+    path/relative/to/repo
+    path/relative/to/repo
 ```
 
 If no files survive the intersection, inform the user that there are no uncommitted agent changes and stop.
@@ -122,6 +129,8 @@ The prompt varies by situation:
 - **On a feature branch with an existing PR**: "You're on `refactor/remove-caching` which has PR #42 open against `main`. Commit and push to it?" Options: proceed, exclude files.
 - **On a feature branch with no PR**: "You're on `feat/ingestion-buffer` with no open PR. Commit, push, and create a new PR?" Options: proceed, exclude files. Also ask for the **base branch** (present the repo's default branch as the default option).
 - **On a default branch**: "You're on `main`. I'll create a new feature branch." Options: proceed, exclude files. Ask for the **base branch** (present `main` as the default).
+
+If other uncommitted changes were detected in Phase 1 Step 4, additionally note: "Other uncommitted changes exist in this repo (not owned by this agent): {list}. These will NOT be included."
 
 If the user excludes files, remove them from the list before continuing.
 
@@ -209,6 +218,8 @@ git -C $COMMIT_DIR apply <absolute-path-to>/agent-changes.patch
 
 Delete the temporary patch file after applying.
 
+If `git apply` fails (e.g., binary files, complex renames, encoding issues), fall back to direct file copy for the affected files: copy each failed file from the workspace root to the corresponding path in `$COMMIT_DIR`, overwriting the base-branch version.
+
 **New files** (untracked):
 
 Copy each new file to the corresponding path in `$COMMIT_DIR`, creating parent directories as needed.
@@ -244,17 +255,24 @@ Read the diffs (`git -C $COMMIT_DIR diff -- <file>` for each file) and group the
 
 Process groups in dependency order (foundational changes first, consuming code after).
 
-For each group:
+For each group, first add any **new (untracked)** files from this group:
 
 ```bash
-git -C $COMMIT_DIR add <file1> <file2> ...
+git -C $COMMIT_DIR add <new-file1> <new-file2>
+```
+
+Then commit using **pathspec** to include only this group's files:
+
+```bash
 git -C $COMMIT_DIR commit -m "$(cat <<'EOF'
 type(scope): concise description
 
 Optional body explaining WHY, not what. One short paragraph max.
 EOF
-)"
+)" -- <file1> <file2> <file3>
 ```
+
+Using `git commit -- <files>` stages and commits only the listed files. Even though the worktree should only contain agent changes, pathspec provides defense-in-depth against unexpected files (e.g., leftover artifacts from a failed patch apply).
 
 **Commit message rules:**
 - Subject line: `type(scope): description` -- under 72 characters
